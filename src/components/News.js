@@ -16,7 +16,7 @@ export class News extends Component {
   }
 
   async fetchNews(query, page = 1) {
-    const url = `https://newsapi.org/v2/everything?apiKey=4ebbdaa368cd4125aaf35d9c880925b6&Q=${query}&page=${page}`;
+    const url = newsapi;
     this.setState({ loading: true });
     try {
       const response = await fetch(url);

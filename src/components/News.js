@@ -9,14 +9,13 @@ export class News extends Component {
       loading: false,
       page: 1,
       query: 'general',
-      
     };
     this.searchInput = React.createRef();
-  
   }
 
   async fetchNews(query, page = 1) {
-    const url = newsapi;
+    const apiKey = process.env.REACT_APP_NEWS_API_KEY;
+    const url = `https://newsapi.org/v2/everything?apiKey=${apiKey}&q=${query}&page=${page}`;
     this.setState({ loading: true });
     try {
       const response = await fetch(url);
@@ -25,7 +24,7 @@ export class News extends Component {
         articles: parsedData.articles || [],
         loading: false,
         page,
-        query
+        query,
       });
     } catch (error) {
       console.error("Failed to fetch news:", error);
@@ -46,7 +45,7 @@ export class News extends Component {
   handlenext = () => {
     this.fetchNews(this.state.query, this.state.page + 1);
   };
-  
+
   handlegoback = () => {
     if (this.state.page > 1) {
       this.fetchNews(this.state.query, this.state.page - 1);
@@ -56,7 +55,7 @@ export class News extends Component {
   render() {
     return (
       <div className='container'>
-        <div className="container d-flex justify-content-center ">
+        <div className="container d-flex justify-content-center">
           <form className="d-flex me-auto" role="search" onSubmit={this.handleSearch}>
             <input
               className="form-control me-2"
@@ -73,7 +72,7 @@ export class News extends Component {
         {this.state.loading && <p className="text-center">Loading...</p>}
 
         <div className="row">
-        {this.state.articles.slice(0, 9).map((element) => (
+          {this.state.articles.slice(0, 9).map((element) => (
             <div className="col-md-4" key={element.url}>
               <Newsitem
                 title={element.title ? element.title.slice(0, 60) : ''}
